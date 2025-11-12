@@ -123,4 +123,4 @@ frontend/
 
 ## 👨‍💻 Author
 
-**Bathri Vijay** | [@bathrivijay05](https://github.com/bathrivijay05)
+**Bathrinath V** | [@bathrivijay05](https://github.com/bathrivijay05)
