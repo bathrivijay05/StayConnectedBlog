@@ -26,9 +26,7 @@ function Home() {
       <div className="posts">
         {posts.length === 0 && <Error />}
         {posts.length !== 0 &&
-          posts.map((post) => {
-            <Card post={post} key={post.id} />;
-          })}
+          posts.map((post) => <Card post={post} key={post.id} />)}
       </div>
     </div>
   );

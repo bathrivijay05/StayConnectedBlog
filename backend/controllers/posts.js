@@ -24,14 +24,18 @@ export const getPost = (req, res) => {
 
 export const addPost = (req, res) => {
   const { title, description, content, category, image } = req.body;
+  const finalImage =
+    image && image.trim() !== "" ? image : "/upload/default.png";
   const query =
     "INSERT INTO posts (title, description, content, category, image, user_id, is_published) VALUES (?, ?, ?, ?, ?, ?, ?)";
   db.query(
     query,
-    [title, description, content, category, image, req.user.id, 1],
+    [title, description, content, category, finalImage, req.user.id, 1],
     (err, data) => {
       if (err) return res.status(403).json("Invalid Operation");
-      return res.status(200).json("Post Created");
+      return res
+        .status(200)
+        .json({ id: data.insertId, message: "Post Created" });
     }
   );
 };
@@ -47,12 +51,14 @@ export const deletePost = (req, res) => {
 
 export const updatePost = (req, res) => {
   const { title, description, content, category, image } = req.body;
+  const finalImage =
+    image && image.trim() !== "" ? image : "/upload/default.png";
   const id = req.params.id;
   const query =
     "UPDATE posts SET title = ?, description = ?, content = ?, category = ?, image = ? WHERE id = ? AND user_id = ?";
   db.query(
     query,
-    [title, description, content, category, image, id, req.user.id],
+    [title, description, content, category, finalImage, id, req.user.id],
     (err, data) => {
       if (err) return res.status(403).json("Invalid Operation");
       return res.status(200).json("Post Updated");
