@@ -47,6 +47,10 @@ app.use((err, req, res, next) => {
   next();
 });
 
-app.listen(process.env.PORT || 8080, () => {
-  console.log(`Server running on port : ${process.env.PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(process.env.PORT || 8080, () => {
+    console.log(`Server running on port : ${process.env.PORT}`);
+  });
+}
+
+export default app;
