@@ -1,8 +1,9 @@
 import { config } from "dotenv";
+import { supabase } from "../utils/supabaseClient.js";
 
 config();
 
-export const uploadImage = (req, res) => {
+export const uploadImage = async (req, res) => {
   // Check if file was uploaded
   if (!req.file) {
     return res
@@ -11,19 +12,30 @@ export const uploadImage = (req, res) => {
   }
 
   const file = req.file;
+  const fileName = `${Date.now()}-${file.originalname}`;
 
-  // Additional validation: check file extension
-  const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"];
-  const fileExtension = file.originalname
-    .toLowerCase()
-    .slice(file.originalname.lastIndexOf("."));
+  try {
+    // Upload to Supabase Storage
+    // Make sure you create a bucket named 'images' in your Supabase dashboard
+    const { data, error } = await supabase.storage
+      .from("images")
+      .upload(fileName, file.buffer, {
+        contentType: file.mimetype,
+      });
 
-  if (!allowedExtensions.includes(fileExtension)) {
-    return res
-      .status(400)
-      .json({ error: "Invalid file extension. Only image files are allowed." });
+    if (error) {
+      throw error;
+    }
+
+    // Get Public URL
+    const { data: publicUrlData } = supabase.storage
+      .from("images")
+      .getPublicUrl(fileName);
+
+    // Return the full public URL
+    res.status(200).json(publicUrlData.publicUrl);
+  } catch (err) {
+    console.error("Supabase Upload Error:", err);
+    res.status(500).json({ error: "Failed to upload image" });
   }
-
-  // Return only the relative path without the full URL
-  res.status(200).json(`/upload/${file.filename}`);
 };

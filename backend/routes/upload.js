@@ -3,14 +3,7 @@ import { uploadImage } from "../controllers/upload.js";
 import multer from "multer";
 import { verifyToken } from "../middleware/verifyToken.js";
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "../frontend/public/upload");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
+const storage = multer.memoryStorage();
 
 // File filter to accept only images
 const fileFilter = (req, file, cb) => {

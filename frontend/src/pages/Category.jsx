@@ -29,7 +29,9 @@ function Category() {
 
   return (
     <div className="home-container">
-      <div className="category-header">{String(category).toUpperCase()}</div>
+      <div className="category-header">
+        <h1>{String(category).toUpperCase()}</h1>
+      </div>
       <div className="posts">
         {posts.length == 0 && <Error />}
         {posts &&

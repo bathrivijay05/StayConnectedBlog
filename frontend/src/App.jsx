@@ -17,6 +17,7 @@ import Footer from "./components/Footer";
 import Category from "./pages/Category";
 import NotFound from "./components/NotFound";
 import Contact from "./pages/Contact";
+import Dashboard from "./pages/Dashboard";
 
 import "./style.scss";
 
@@ -28,11 +29,15 @@ const Layout = () => {
   }, [pathname]);
 
   return (
-    <>
-      <Header />
-      <Outlet />
-      <Footer />
-    </>
+    <div className="app">
+      <div className="container">
+        <Header />
+        <div className="main-content">
+          <Outlet />
+        </div>
+        <Footer />
+      </div>
+    </div>
   );
 };
 
@@ -56,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: "write",
         element: <Write />,
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />,
       },
       {
         path: "article/:id",

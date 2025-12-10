@@ -1,78 +1,81 @@
 # StayConnected – Full Stack News Blogging Platform
 
-A modern, responsive news blogging platform built with React, Express.js, and MySQL.
+A modern, responsive news blogging platform built with React, Express.js, and PostgreSQL (Supabase).
 
 ## 🚀 Features
 
-- JWT-based authentication with password hashing
-- Rich text editor (React Quill)
-- Category-based filtering (India, World, Business, Technology, Sports)
-- Role-based access control
-- Responsive design with SCSS
-- Auto database table creation
+- **Authentication**: JWT-based auth with secure password hashing.
+- **Content Management**: Rich text editor (React Quill) with image uploads via Supabase Storage.
+- **Draft System**: Save posts as drafts, preview them privately, and publish when ready.
+- **User Dashboard**: Manage your posts (Edit, Delete, View Status).
+- **Categories**: Filter news by India, World, Business, Technology, Sports.
+- **Responsive UI**: Completely overhauled design using SCSS with a mobile-first approach.
 
-## 📋 Prerequisites
+## 🛠️ Tech Stack
 
-- Node.js (v14+)
-- MySQL (v5.7+)
-- npm or yarn
+- **Frontend**: React, Vite, SCSS
+- **Backend**: Node.js, Express.js
+- **Database**: PostgreSQL (via Supabase)
+- **Storage**: Supabase Storage (for images)
 
-## 🛠️ Setup
+## ⚙️ Setup
 
-### 1. Clone Repository
+### 1. Clone & Install
 
 ```bash
 git clone https://github.com/bathrivijay05/StayConnectedBlog.git
 cd StayConnectedBlog
-```
 
-### 2. Database
-
-```sql
-CREATE DATABASE stayconnected;
-```
-
-### 3. Backend
-
-```bash
+# Install Backend Dependencies
 cd backend
+npm install
+
+# Install Frontend Dependencies
+cd ../frontend
 npm install
 ```
 
-Create `.env` file:
+### 2. Environment Variables
+
+**Backend (`backend/.env`)**
 
 ```env
-DB_HOSTNAME=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=your_password
-DB_DBNAME=stayconnected
+# Database (Supabase Connection Pooler)
+DB_HOSTNAME=aws-0-us-east-1.pooler.supabase.com
+DB_PORT=6543
+DB_USER=postgres.your-project
+DB_PASSWORD=your_db_password
+DB_DBNAME=postgres
 
+# Supabase Storage (For Images)
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your_service_role_secret
+
+# App Config
 FRONTEND_URL=http://localhost:5173
 PORT=8080
 JWT_SECRET=your_jwt_secret
 ```
 
-Generate JWT secret: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
+**Frontend (`frontend/.env`)**
+
+```env
+VITE_SERVER_BASE_URL=http://localhost:8080
+```
+
+### 3. Run Application
+
+**Backend**
 
 ```bash
+cd backend
 npm start
 ```
 
-### 4. Frontend
+**Frontend**
 
 ```bash
 cd frontend
-npm install
-```
-
-Create `.env` file:
-
-```env
-VITE_API_URL=http://localhost:8080/api
-```
-
-```bash
 npm run dev
 ```
 
@@ -80,24 +83,20 @@ npm run dev
 
 ```
 backend/
-├── controllers/  # Business logic
+├── controllers/  # Business logic (Auth, Posts, Uploads)
 ├── middleware/   # JWT verification
 ├── routes/       # API routes
-└── db.js        # MySQL + auto table creation
+├── utils/        # Supabase client
+└── db.js         # PostgreSQL connection
 
 frontend/
 ├── src/
-│   ├── components/  # Reusable UI
-│   ├── context/     # Auth state
-│   └── pages/       # Route pages
-└── public/upload/   # Image storage
+│   ├── components/  # Reusable UI (Card, Header, Footer)
+│   ├── context/     # Auth state management
+│   ├── pages/       # Application views
+│   └── style.scss   # Global styles
 ```
 
-## 🔌 API Endpoints
-
-**Authentication**
-
-- `POST /api/auth/signup` - Register
 - `POST /api/auth/login` - Login
 - `POST /api/auth/logout` - Logout
 

@@ -85,7 +85,7 @@ function Write() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, isPublished) => {
     e.preventDefault();
 
     // Validation: Title is required
@@ -106,11 +106,12 @@ function Write() {
             content,
             category,
             image: imageUrl,
+            is_published: isPublished,
           },
           { withCredentials: true }
         );
-        // Navigate to the updated article
-        navigate(`/article/${state.id}`);
+        // Navigate to the dashboard
+        navigate("/dashboard");
       } else {
         // Create new post
         response = await axios.post(
@@ -121,15 +122,12 @@ function Write() {
             content,
             category,
             image: imageUrl,
+            is_published: isPublished,
           },
           { withCredentials: true }
         );
-        // Navigate to the newly created article
-        if (response.data && response.data.id) {
-          navigate(`/article/${response.data.id}`);
-        } else {
-          navigate("/");
-        }
+        // Navigate to the dashboard
+        navigate("/dashboard");
       }
     } catch (err) {
       console.error("Error publishing article:", err);
@@ -156,128 +154,101 @@ function Write() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <ReactQuill
-          className="editor"
-          theme="snow"
-          value={content}
-          onChange={setContent}
-        />
+        <div className="editor">
+          <ReactQuill theme="snow" value={content} onChange={setContent} />
+        </div>
       </div>
       <div className="right">
-        <div className="right-card">
-          <h3>Publish</h3>
-          {state && (
-            <p>
-              Status: Published on {moment(state?.created_at).format("llll")}
-            </p>
+        <div className="item">
+          <h1>Publish</h1>
+          <span>
+            <b>Status: </b> {state?.is_published ? "Published" : "Draft"}
+          </span>
+          <span>
+            <b>Visibility: </b> Public
+          </span>
+          <div className="file">
+            <label htmlFor="file">Upload Image</label>
+            <input
+              style={{ display: "none" }}
+              type="file"
+              id="file"
+              name=""
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+            {image && <span>{image.name}</span>}
+            {image && <button onClick={uploadImage}>Upload Now</button>}
+          </div>
+          {imageUrl && (
+            <div className="file">
+              <img src={imageUrl} alt="" style={{ width: "100%" }} />
+            </div>
           )}
-          {!state && <p>Status: Not Published</p>}
-          <div className="right-card-div">
-            {/* <button className="button">Save as a draft</button> */}
-            <button className="button primary" onClick={handleSubmit}>
+          <div className="buttons">
+            <button className="save" onClick={(e) => handleSubmit(e, false)}>
+              Save as a draft
+            </button>
+            <button className="publish" onClick={(e) => handleSubmit(e, true)}>
               {state ? "Update" : "Publish"}
             </button>
           </div>
         </div>
-        <div className="right-card">
-          <h3>Categories</h3>
-          <div className="category-list">
+        <div className="item">
+          <h1>Category</h1>
+          <div className="cat">
             <input
-              type="checkbox"
-              id="category1"
-              name="category"
-              value="India"
+              type="radio"
               checked={category === "India"}
+              name="cat"
+              value="India"
+              id="india"
               onChange={(e) => setCategory(e.target.value)}
             />
-            <label htmlFor="category1">India</label>
-            <br />
+            <label htmlFor="india">India</label>
+          </div>
+          <div className="cat">
             <input
-              type="checkbox"
-              id="category2"
-              name="category"
-              value="World"
+              type="radio"
               checked={category === "World"}
+              name="cat"
+              value="World"
+              id="world"
               onChange={(e) => setCategory(e.target.value)}
             />
-            <label htmlFor="category2">World</label>
-            <br />
+            <label htmlFor="world">World</label>
+          </div>
+          <div className="cat">
             <input
-              type="checkbox"
-              id="category3"
-              name="category"
-              value="Business"
-              checked={category === "Business"}
-              onChange={(e) => setCategory(e.target.value)}
-            />
-            <label htmlFor="category3">Business</label>
-            <br />
-            <input
-              type="checkbox"
-              id="category4"
-              name="category"
-              value="Technology"
+              type="radio"
               checked={category === "Technology"}
+              name="cat"
+              value="Technology"
+              id="technology"
               onChange={(e) => setCategory(e.target.value)}
             />
-            <label htmlFor="category4">Technology</label>
-            <br />
+            <label htmlFor="technology">Technology</label>
+          </div>
+          <div className="cat">
             <input
-              type="checkbox"
-              id="category5"
-              name="category"
-              value="Sports"
+              type="radio"
               checked={category === "Sports"}
+              name="cat"
+              value="Sports"
+              id="sports"
               onChange={(e) => setCategory(e.target.value)}
             />
-            <label htmlFor="category5">Sports</label>
-            <br />
+            <label htmlFor="sports">Sports</label>
           </div>
-        </div>
-        <div className="right-card">
-          <h3>Upload Image</h3>
-          <input
-            type="text"
-            name="imageurl"
-            id="imageurl"
-            accept="image/*"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-          />
-          <div className="image-upload-container">
+          <div className="cat">
             <input
-              id="file"
-              type="file"
-              name="file"
-              accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  // Validate file type on selection
-                  const allowedTypes = [
-                    "image/jpeg",
-                    "image/jpg",
-                    "image/png",
-                    "image/gif",
-                    "image/webp",
-                    "image/svg+xml",
-                  ];
-                  if (!allowedTypes.includes(file.type)) {
-                    alert("Invalid file type! Please select an image file.");
-                    e.target.value = "";
-                    setImage(null);
-                    return;
-                  }
-                  setImage(file);
-                }
-              }}
+              type="radio"
+              checked={category === "Business"}
+              name="cat"
+              value="Business"
+              id="business"
+              onChange={(e) => setCategory(e.target.value)}
             />
-            <button className="button" onClick={uploadImage}>
-              Upload
-            </button>
-          </div>
-          <div className="image-container">
-            {imageUrl && <img src={imageUrl} alt="Uploaded" />}
+            <label htmlFor="business">Business</label>
           </div>
         </div>
       </div>

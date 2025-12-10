@@ -33,3 +33,6 @@ backend/dist/
 *.njsproj
 *.sln
 *.sw?
+
+# Others
+ARCHITECTURE.md

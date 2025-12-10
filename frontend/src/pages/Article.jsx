@@ -33,7 +33,8 @@ function Article() {
     const fetchPost = async (id) => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_SERVER_BASE_URL}/api/posts/${id}`
+          `${import.meta.env.VITE_SERVER_BASE_URL}/api/posts/${id}`,
+          { withCredentials: true }
         );
         setPost(res.data);
       } catch (err) {
@@ -57,16 +58,25 @@ function Article() {
           )}
           <h1 className="article-title">{post?.title}</h1>
           <div className="article-meta">
-            Posted {moment(post?.created_at).fromNow()} | by {post?.username}
+            <div className="user-info">
+              <span>Posted {moment(post?.created_at).fromNow()}</span>
+              <span>
+                by <b>{post?.username}</b>
+              </span>
+            </div>
             {currentUser && currentUser?.username === post?.username && (
-              <>
-                <Link className="edit-link" to={`/write?id=${id}`} state={post}>
+              <div className="actions">
+                <Link
+                  className="edit-link edit"
+                  to={`/write?id=${id}`}
+                  state={post}
+                >
                   <i className="fa fa-edit"></i> Edit
                 </Link>
-                <Link className="edit-link" onClick={handleDelete}>
+                <span className="edit-link delete" onClick={handleDelete}>
                   <i className="fa fa-trash"></i> Delete
-                </Link>
-              </>
+                </span>
+              </div>
             )}
           </div>
           <div className="article-desc">{post?.description}</div>

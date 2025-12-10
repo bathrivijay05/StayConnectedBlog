@@ -52,11 +52,10 @@ function Header() {
         {currentUser && (
           <Link
             className="header-link"
-            to="/write"
+            to="/dashboard"
             onClick={() => setMenuOpen(false)}
-            state={null}
           >
-            <b>Write</b>
+            <b>Dashboard</b>
           </Link>
         )}
         {!currentUser && (
