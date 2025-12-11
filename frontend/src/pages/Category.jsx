@@ -3,15 +3,18 @@ import Card from "../components/Card";
 import axios from "axios";
 import Error from "../components/Error";
 import { useNavigate, useLocation } from "react-router-dom";
+import Loading from "../components/Loading";
 
 function Category() {
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const category = location.pathname.split("/")[2];
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true);
       try {
         const res = await axios.get(
           `${
@@ -22,10 +25,16 @@ function Category() {
         setPosts(res.data);
       } catch (err) {
         navigate("/404", { replace: true });
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchPosts();
   }, [category]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="home-container">

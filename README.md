@@ -55,6 +55,9 @@ SUPABASE_KEY=your_service_role_secret
 FRONTEND_URL=http://localhost:5173
 PORT=8080
 JWT_SECRET=your_jwt_secret
+
+# Production Only (Vercel)
+ALLOW_SIGNUP=true
 ```
 
 **Frontend (`frontend/.env`)**
@@ -69,7 +72,7 @@ VITE_SERVER_BASE_URL=http://localhost:8080
 
 ```bash
 cd backend
-npm start
+npm run dev
 ```
 
 **Frontend**
@@ -78,6 +81,13 @@ npm start
 cd frontend
 npm run dev
 ```
+
+## 🚀 Deployment (Vercel)
+
+This project is configured for separate frontend and backend deployments on Vercel.
+
+1.  **Backend**: Deploy the `backend` folder. Add all environment variables from `backend/.env`.
+2.  **Frontend**: Deploy the `frontend` folder. Add `VITE_SERVER_BASE_URL` pointing to your deployed backend URL.
 
 ## 📁 Project Structure
 
@@ -96,30 +106,3 @@ frontend/
 │   ├── pages/       # Application views
 │   └── style.scss   # Global styles
 ```
-
-- `POST /api/auth/login` - Login
-- `POST /api/auth/logout` - Logout
-
-**Posts**
-
-- `GET /api/posts` - Get all posts
-- `GET /api/posts?cat=Category` - Filter by category
-- `GET /api/posts/:id` - Get single post
-- `POST /api/posts` - Create post 🔒
-- `PUT /api/posts/:id` - Update post 🔒
-- `DELETE /api/posts/:id` - Delete post 🔒
-
-**Upload**
-
-- `POST /api/upload` - Upload image 🔒
-
-🔒 = Requires authentication
-
-## 📚 Key Libraries
-
-**Backend:** express, mysql2, bcryptjs, jsonwebtoken, multer, cors  
-**Frontend:** react, react-router-dom, axios, react-quill, sass, vite
-
-## 👨‍💻 Author
-
-**Bathrinath V** | [@bathrivijay05](https://github.com/bathrivijay05)

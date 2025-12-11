@@ -6,6 +6,11 @@ import { config } from "dotenv";
 config();
 
 export const signup = (req, res) => {
+  // Restrict signup in production unless explicitly allowed
+  if (process.env.VERCEL && process.env.ALLOW_SIGNUP !== "true") {
+    return res.status(403).json("Signup is currently disabled.");
+  }
+
   // check if user already exists
   const query = "SELECT * FROM users WHERE email = $1 OR username = $2";
   db.query(query, [req.body.email, req.body.username], (err, data) => {

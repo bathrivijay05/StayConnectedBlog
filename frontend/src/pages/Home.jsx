@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import Card from "../components/Card";
 import axios from "axios";
 import Error from "../components/Error";
+import Loading from "../components/Loading";
 
 function Home() {
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -16,10 +18,16 @@ function Home() {
         setPosts(res.data);
       } catch (err) {
         setPosts([]);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchPosts();
   }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="home-container">

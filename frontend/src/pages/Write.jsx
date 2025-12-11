@@ -139,6 +139,7 @@ function Write() {
     <div className="editor-container">
       <div className="left">
         <input
+          id="title"
           required
           type="text"
           name="title"
@@ -146,19 +147,28 @@ function Write() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <input
-          required
-          type="text"
-          name="description"
-          placeholder="Enter or edit article description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
         <div className="editor">
           <ReactQuill theme="snow" value={content} onChange={setContent} />
         </div>
       </div>
       <div className="right">
+        <div className="item">
+          <h1>Description</h1>
+          <textarea
+            className="description-box"
+            placeholder="Enter or edit article description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={4}
+            style={{
+              width: "100%",
+              padding: "10px",
+              border: "1px solid #e7e7e7",
+              borderRadius: "5px",
+              resize: "vertical",
+            }}
+          />
+        </div>
         <div className="item">
           <h1>Publish</h1>
           <span>

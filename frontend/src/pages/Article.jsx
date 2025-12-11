@@ -5,9 +5,11 @@ import { AuthContext } from "../context/authContext";
 import axios from "axios";
 import moment from "moment";
 import DOMPurify from "dompurify";
+import Loading from "../components/Loading";
 
 function Article() {
   const [post, setPost] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const id = location.pathname.split("/")[2];
 
@@ -39,10 +41,16 @@ function Article() {
         setPost(res.data);
       } catch (err) {
         navigate("/404", { replace: true });
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchPost(id);
   }, [id]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="article-container">

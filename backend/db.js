@@ -21,7 +21,7 @@ const db = new Pool({
 
 // Handle pool errors
 db.on("error", (err, client) => {
-  console.error("Unexpected error on idle client", err);
+  console.error("Unexpected error on idle client");
   // Don't exit the process here, just log the error
 });
 

@@ -2,9 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/authContext";
+import Loading from "../components/Loading";
 
 const Dashboard = () => {
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -21,6 +23,8 @@ const Dashboard = () => {
         setPosts(res.data);
       } catch (err) {
         console.log(err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchPosts();
@@ -42,6 +46,10 @@ const Dashboard = () => {
     const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent;
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="dashboard">
