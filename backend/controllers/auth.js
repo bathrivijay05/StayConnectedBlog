@@ -48,14 +48,27 @@ export const login = (req, res) => {
 
     const { password, ...other } = data.rows[0];
 
-    res.cookie("token", token).status(200).json(other);
+    const isProduction = process.env.VERCEL;
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
+      })
+      .status(200)
+      .json(other);
   });
 };
 
 export const logout = (req, res) => {
+  const isProduction = process.env.VERCEL;
+
   res
     .clearCookie("token", {
       httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     })
     .status(200)
     .json("User has been logged out.");
